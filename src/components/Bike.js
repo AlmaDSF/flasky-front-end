@@ -1,4 +1,16 @@
+import hthe peprot
 import "./Bike.css";
+
+function Bike({id, name, size, type,price} ) {
+
+    const 
+
+
+}
+
+
+
+
 
 function Bike(){
     const myBike = {
@@ -22,5 +34,7 @@ function Bike(){
         </div>
     );
 }
-
+Bike.protoTypes = {
+    id:protiprr
+} 
 export default Bike;

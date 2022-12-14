@@ -1,7 +1,17 @@
 import Bike from "./Bike";
 
+
+function BikeList({props}) { 
+    return(
+        BikeList.map((bike) =>
+        <li key={bike.id} =>
+        
+    )
+}
+
+
 function BikeList(){
- const bikesList = [
+const bikesList = [
     {
         id: 1,
         name: "This is some data that we will work to display next class!",
@@ -16,11 +26,11 @@ function BikeList(){
         price: 20,
         type: "duplicate"
     }
- ];
+];
 
- return(
+return(
     bikesList.map((bike) => <Bike/>)
     //returns [<Bike/>, <Bike/>]
- );
+);
 }
 export default BikeList;
