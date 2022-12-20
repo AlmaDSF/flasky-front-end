@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import BikeList from "./components/BikeList.js";
 import axios from "axios";
+import NewBikeForm from "./components/NewBikeForm";
 
 // const INITIAL_BIKES = [
 //   {
@@ -33,67 +34,67 @@ function App() {
   const [bikesList, setBikesList] = useState([]);
 
   const URL = "http://localhost:5000/bike";
-  useEffect(()=>{
-    axios.get(URL)
-    .then((res) => {
-      //console.log(res);
-      const bikesAPIResCopy = res.data.map((bike) => {
-        return {
-          ...bike
-      }})
-      setBikesList(bikesAPIResCopy);
-        
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  useEffect(() => {
+    axios
+      .get(URL)
+      .then((res) => {
+        //console.log(res);
+        const bikesAPIResCopy = res.data.map((bike) => {
+          return {
+            ...bike,
+          };
+        });
+        setBikesList(bikesAPIResCopy);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   // const initialCopy = INITIAL_BIKES.map((bike) => {
   //   return { ...bike };
   // });
 
-
   const updatePrice = (bikeId, updatedPrice) => {
     console.log("updatePrice called");
     const newBikesList = [];
-    axios.patch(`${URL}/${bikeId}/${updatedPrice}`)
-    .then((res)=>{
-      for (const bike of bikesList) {
-        if (bike.id !== bikeId) {
-          newBikesList.push(bike);
-        } else {
-          const newBike = {
-            ...bike,
-            price: updatedPrice,
-          };
-          newBikesList.push(newBike);
+    axios
+      .patch(`${URL}/${bikeId}/${updatedPrice}`)
+      .then((res) => {
+        for (const bike of bikesList) {
+          if (bike.id !== bikeId) {
+            newBikesList.push(bike);
+          } else {
+            const newBike = {
+              ...bike,
+              price: updatedPrice,
+            };
+            newBikesList.push(newBike);
+          }
         }
-      }
-      setBikesList(newBikesList);
-    })
-    .catch((err)=>{
-      console.log(err);
-    });
-    
+        setBikesList(newBikesList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deleteBike = (bikeId) => {
     console.log("deleteBike Called");
-    axios.delete(`${URL}/${bikeId}`)
-    .then(()=>{
-      const newBikesList = [];
-      for (const bike of bikesList) {
-        if (bike.id !== bikeId) {
-          newBikesList.push(bike);
+    axios
+      .delete(`${URL}/${bikeId}`)
+      .then(() => {
+        const newBikesList = [];
+        for (const bike of bikesList) {
+          if (bike.id !== bikeId) {
+            newBikesList.push(bike);
+          }
         }
-      }
-      setBikesList(newBikesList);
-    })
-    .catch((err)=>{
-      console.log(err);
-    });
-    
+        setBikesList(newBikesList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -104,7 +105,7 @@ function App() {
         updatePrice={updatePrice}
         deleteBike={deleteBike}
       />
-      <button>Add Bike</button>
+      <NewBikeForm />
     </div>
   );
 }
