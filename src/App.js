@@ -34,7 +34,8 @@ function App() {
   const [bikesList, setBikesList] = useState([]);
 
   const URL = "http://localhost:5000/bike";
-  useEffect(() => {
+
+  const fetchAllBikes = () =>{
     axios
       .get(URL)
       .then((res) => {
@@ -49,7 +50,9 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }
+
+  useEffect(fetchAllBikes, []); // initial get request
 
   // const initialCopy = INITIAL_BIKES.map((bike) => {
   //   return { ...bike };
@@ -97,6 +100,23 @@ function App() {
       });
   };
 
+  const addBike = (newBikeInfo) => {
+    axios.post(URL, newBikeInfo)
+    .then((response)=>{
+      //fetchAllBikes();  //<- This helper function will make a .get() call to fetch all bikes and update the state variable to display them
+      const newBikes = [...bikesList];
+      const newBikeJSON={
+        ...newBikeInfo,
+        "id": response.data.id
+      }
+      newBikes.push(newBikeJSON);
+      setBikesList(newBikes); //this method does not require a .get request; we are pushing the bike data to the bikes list and using the setter to trigger a rerender.
+    })
+    .catch((error)=>{
+      console.log(error);
+    });
+  }
+
   return (
     <div>
       <Navbar />
@@ -105,7 +125,7 @@ function App() {
         updatePrice={updatePrice}
         deleteBike={deleteBike}
       />
-      <NewBikeForm />
+      <NewBikeForm addBikeCallbackFunc={addBike}/>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import "./NewBikeForm.css";
+import PropTypes from "prop-types";
 
 import { useState } from "react";
 
@@ -9,23 +10,31 @@ const INITIAL_FORM_DATA = {
   name: "Hella",
 };
 
-const NewBikeForm = () => {
+const NewBikeForm = (props) => {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const handleChange = (e) => {
-    console.log("Handle change called");
-    console.log(
-      `Target name: ${e.target.name} Target value: ${e.target.value}`
-    );
+    //OPTIONAL- type conversion from strings to ints below; works without it.
+    let datafield = e.target.value;
+    if(e.target.name==="size" || e.target.name==="price"){
+      datafield = parseInt(datafield);
+    }
     const newFormData = {
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: datafield,
     };
+    //console.log(newFormData);
     setFormData(newFormData);
   };
 
+  const handleNewBikeSubmit = (e) =>{
+    e.preventDefault();
+    //formData contains the new Bike info that we want to create
+    props.addBikeCallbackFunc(formData);
+  }
+
   return (
-    <form>
+    <form onSubmit={handleNewBikeSubmit}>
       <label htmlFor="size">Bike Size</label>
       <input
         type="number"
@@ -61,8 +70,12 @@ const NewBikeForm = () => {
         value={formData.price}
         onChange={handleChange}
       />
+    
+      <input type="submit" value="Add bike"/>
     </form>
   );
 };
-
+NewBikeForm.propTypes = {
+  addBikeCallbackFunc: PropTypes.func.isRequired
+};
 export default NewBikeForm;
